@@ -16,4 +16,7 @@ public interface TheaterDao {
 
     @Query("SELECT * FROM theaters")
     List<Theater> getAll();
+
+    @Query("SELECT * FROM theaters")
+    List<Theater> getAllSync();
 }

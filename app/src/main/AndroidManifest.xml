@@ -21,6 +21,12 @@
             android:name=".activities.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ShowtimeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.MovieAtShowtimeActivity"
+            android:exported="false" />
+        <activity
             android:name=".TheaterActivity"
             android:exported="false" />
         <activity

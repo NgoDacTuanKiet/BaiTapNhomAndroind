@@ -1,5 +1,6 @@
 package com.hotel.baitapnhomandroind;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hotel.baitapnhomandroind.activities.ShowtimeActivity;
 import com.hotel.baitapnhomandroind.entities.Theater;
 
 import java.util.List;
@@ -32,6 +34,13 @@ public class TheaterAdapter extends RecyclerView.Adapter<TheaterAdapter.TheaterV
         Theater theater = theaterList.get(position);
         holder.tvName.setText(theater.name);
         holder.tvLocation.setText(theater.location);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ShowtimeActivity.class);
+            intent.putExtra("THEATER_ID", theater.id);
+            intent.putExtra("THEATER_NAME", theater.name);
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override
