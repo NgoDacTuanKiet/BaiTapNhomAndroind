@@ -27,6 +27,12 @@
             android:name=".activities.MovieAtShowtimeActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.SeatSelectionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.TicketDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".TheaterActivity"
             android:exported="false" />
         <activity

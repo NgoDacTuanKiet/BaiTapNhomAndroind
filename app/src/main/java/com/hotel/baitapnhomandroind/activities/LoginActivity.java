@@ -14,6 +14,8 @@ import com.hotel.baitapnhomandroind.R;
 import com.hotel.baitapnhomandroind.dal.AppDB;
 import com.hotel.baitapnhomandroind.entities.User;
 
+import java.util.concurrent.Executors;
+
 public class LoginActivity extends AppCompatActivity {
 
     EditText edtUsername, edtPassword;
@@ -44,22 +46,26 @@ public class LoginActivity extends AppCompatActivity {
         String username = edtUsername.getText().toString();
         String password = edtPassword.getText().toString();
 
-        User user = db.userDao().login(username, password);
+        Executors.newSingleThreadExecutor().execute(() -> {
+            User user = db.userDao().login(username, password);
+            runOnUiThread(() -> {
+                if (user != null) {
+                    SharedPreferences sp = getSharedPreferences("LOGIN", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt("userId", user.id);
+                    editor.putString("username", user.username);
+                    editor.putBoolean("isLogin", true);
+                    editor.apply();
 
-        if (user != null) {
-            SharedPreferences sp = getSharedPreferences("LOGIN", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString("username", user.username);
-            editor.putBoolean("isLogin", true);
-            editor.apply();
+                    Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
-            Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        } else {
-            Toast.makeText(this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
-        }
+                    startActivity(new Intent(this, MainActivity.class));
+                    finish();
+                } else {
+                    Toast.makeText(this, "Sai tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     @Override

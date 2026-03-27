@@ -1,5 +1,7 @@
 package com.hotel.baitapnhomandroind.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,8 +89,23 @@ public class MovieAtShowtimeActivity extends AppCompatActivity {
             holder.tvTitle.setText(movie.title);
             holder.tvDuration.setText("Thời lượng: " + movie.duration + " phút");
             holder.btnBook.setOnClickListener(v -> {
-                // Ở đây bạn có thể mở màn hình thanh toán hoặc xác nhận đặt vé
-                Toast.makeText(MovieAtShowtimeActivity.this, "Đã chọn đặt vé phim: " + movie.title, Toast.LENGTH_SHORT).show();
+                SharedPreferences sp = getSharedPreferences("LOGIN", MODE_PRIVATE);
+                boolean isLogin = sp.getBoolean("isLogin", false);
+
+                if (!isLogin) {
+                    Toast.makeText(MovieAtShowtimeActivity.this, "Bạn cần đăng nhập để đặt vé", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MovieAtShowtimeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    // Chuyển sang màn hình chọn ghế
+                    Intent intent = new Intent(MovieAtShowtimeActivity.this, SeatSelectionActivity.class);
+                    intent.putExtra("MOVIE_ID", movie.id);
+                    intent.putExtra("THEATER_ID", theaterId);
+                    intent.putExtra("SHOW_DATE", showDate);
+                    intent.putExtra("SHOW_TIME", showTime);
+                    intent.putExtra("MOVIE_TITLE", movie.title);
+                    startActivity(intent);
+                }
             });
         }
 

@@ -19,5 +19,8 @@ public interface MovieDao {
     LiveData<List<Movie>> getAll();
 
     @Query("SELECT * FROM movies")
-    List<Movie> getAllSync(); // Dùng để kiểm tra đồng bộ khi seed data
+    List<Movie> getAllSync();
+
+    @Query("SELECT * FROM movies WHERE id = :id")
+    Movie getById(int id);
 }

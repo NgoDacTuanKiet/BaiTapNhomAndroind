@@ -12,8 +12,14 @@ import java.util.List;
 public interface TicketDao {
 
     @Insert
-    void insert(Ticket ticket);
+    long insert(Ticket ticket);
 
     @Query("SELECT * FROM tickets WHERE userId = :userId")
     List<Ticket> getByUser(int userId);
+
+    @Query("SELECT seatNumber FROM tickets WHERE showtimeId = :showtimeId")
+    List<String> getBookedSeats(int showtimeId);
+
+    @Query("SELECT * FROM tickets WHERE id = :id")
+    Ticket getById(int id);
 }

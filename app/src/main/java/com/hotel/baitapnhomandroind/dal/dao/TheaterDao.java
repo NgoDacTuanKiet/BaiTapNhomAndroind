@@ -19,4 +19,7 @@ public interface TheaterDao {
 
     @Query("SELECT * FROM theaters")
     List<Theater> getAllSync();
+
+    @Query("SELECT * FROM theaters WHERE id = :id")
+    Theater getById(int id);
 }
