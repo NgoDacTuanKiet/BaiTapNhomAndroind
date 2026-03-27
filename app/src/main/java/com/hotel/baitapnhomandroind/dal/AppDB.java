@@ -24,24 +24,19 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {User.class, Movie.class, Theater.class, Showtime.class, Ticket.class},
-        version = 1,
+        version = 2, // Tăng version lên 2 để trigger reset database
         exportSchema = false
 )
 public abstract class AppDB extends RoomDatabase {
 
-    // DAO
     public abstract UserDao userDao();
     public abstract MovieDao movieDao();
     public abstract TheaterDao theaterDao();
     public abstract ShowtimeDao showtimeDao();
     public abstract TicketDao ticketDao();
 
-    // Singleton
     private static volatile AppDB INSTANCE;
-
-    // Thread chạy background
-    private static final ExecutorService databaseWriteExecutor =
-            Executors.newFixedThreadPool(4);
+    private static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
 
     public static AppDB getInstance(final Context context) {
         if (INSTANCE == null) {
@@ -52,8 +47,8 @@ public abstract class AppDB extends RoomDatabase {
                                     AppDB.class,
                                     "movie_db"
                             )
-                            .fallbackToDestructiveMigration() // reset db khi đổi version
-                            .addCallback(roomCallback) // thêm data mẫu
+                            .fallbackToDestructiveMigration() // Sẽ xóa và tạo lại DB khi tăng version
+                            .addCallback(roomCallback)
                             .build();
                 }
             }
@@ -61,41 +56,51 @@ public abstract class AppDB extends RoomDatabase {
         return INSTANCE;
     }
 
-    // Callback để insert data mẫu khi tạo DB lần đầu
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-
             databaseWriteExecutor.execute(() -> {
                 AppDB database = INSTANCE;
 
-                // ===== Sample Users =====
+                // Sample User
                 User user = new User();
                 user.username = "admin";
                 user.password = "123";
                 database.userDao().insert(user);
 
-                // ===== Sample Movies =====
-                Movie m1 = new Movie();
-                m1.title = "Avengers";
-                m1.description = "Marvel movie";
-                m1.duration = 120;
-                database.movieDao().insert(m1);
+                // Sample Movies
+                String[][] movieData = {
+                        {"Avengers: Endgame", "Siêu anh hùng Marvel", "180"},
+                        {"The Dark Knight", "Người dơi đối đầu Joker", "152"},
+                        {"Interstellar", "Khám phá vũ trụ", "169"},
+                        {"Inception", "Kẻ đánh cắp giấc mơ", "148"}
+                };
+                for (String[] data : movieData) {
+                    Movie m = new Movie();
+                    m.title = data[0];
+                    m.description = data[1];
+                    m.duration = Integer.parseInt(data[2]);
+                    database.movieDao().insert(m);
+                }
 
-                Movie m2 = new Movie();
-                m2.title = "Batman";
-                m2.description = "DC movie";
-                m2.duration = 110;
-                database.movieDao().insert(m2);
-
-                // ===== Sample Theater =====
-                Theater t1 = new Theater();
-                t1.name = "CGV";
-                t1.location = "Hà Nội";
-                database.theaterDao().insert(t1);
-
-                // NOTE: vì insert async nên nếu cần chính xác ID → phải query lại
+                // Sample Theaters (8 rạp)
+                String[][] theaterData = {
+                        {"CGV Vincom Center", "Bà Triệu, Hà Nội"},
+                        {"Lotte Cinema Landmark", "Phạm Hùng, Hà Nội"},
+                        {"BHD Star Discovery", "Cầu Giấy, Hà Nội"},
+                        {"Galaxy Cinema Mipec", "Long Biên, Hà Nội"},
+                        {"Beta Cinemas Mỹ Đình", "Nam Từ Liêm, Hà Nội"},
+                        {"Cinestar Quốc Thanh", "Quận 1, TPHCM"},
+                        {"BHD Star Bitexco", "Quận 1, TPHCM"},
+                        {"Galaxy Nguyễn Du", "Quận 1, TPHCM"}
+                };
+                for (String[] data : theaterData) {
+                    Theater t = new Theater();
+                    t.name = data[0];
+                    t.location = data[1];
+                    database.theaterDao().insert(t);
+                }
             });
         }
     };

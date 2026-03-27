@@ -18,6 +18,9 @@
             android:name=".activities.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".TheaterActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
