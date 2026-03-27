@@ -1,7 +1,7 @@
 package com.hotel.baitapnhomandroind.activities;
 
 import android.os.Bundle;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +18,7 @@ public class MovieListActivity extends AppCompatActivity {
     private RecyclerView rvMovies;
     private MovieAdapter movieAdapter;
     private AppDB db;
-    private ImageButton btnBack;
+    private Button btnBack; // Đổi từ ImageButton sang Button để khớp với XML mới
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +32,12 @@ public class MovieListActivity extends AppCompatActivity {
         movieAdapter = new MovieAdapter(new ArrayList<>());
         rvMovies.setAdapter(movieAdapter);
 
+        // Xử lý sự kiện nút Back (giờ là Button ở cuối màn hình)
         btnBack.setOnClickListener(v -> finish());
 
         db = AppDB.getInstance(this);
         
-        // Sử dụng LiveData để tự động cập nhật UI khi database có thay đổi
+        // Quan sát dữ liệu từ LiveData
         db.movieDao().getAll().observe(this, movies -> {
             if (movies != null) {
                 movieAdapter.setMovies(movies);
