@@ -1,50 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F0F2F5">
+    android:background="#FDF7FF">
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        app:cardElevation="8dp">
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:background="#FFFFFF">
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="Danh sách phim đang chiếu"
+            android:textColor="#403B4D"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_centerVertical="true"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Back"
-                android:src="@android:drawable/ic_menu_revert"
-                app:tint="#1A73E8" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="PHIM ĐANG CHIẾU"
-                android:textColor="#1A73E8"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMovies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="8dp"
+        android:layout_above="@+id/btnBack"
+        android:layout_below="@+id/header"
         android:clipToPadding="false"
-        android:scrollbarStyle="outsideOverlay"/>
+        android:padding="8dp" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:backgroundTint="#6750A4"
+        android:padding="12dp"
+        android:text="Quay lại"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="25dp" />
+
+</RelativeLayout>
