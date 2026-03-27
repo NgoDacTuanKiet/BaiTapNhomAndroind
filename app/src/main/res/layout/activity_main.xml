@@ -11,12 +11,14 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Movie Ticket App"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp"
+        android:gravity="center"/>
 
     <Button
         android:id="@+id/btnLogin"
@@ -36,6 +38,16 @@
         android:id="@+id/btnViewTheaters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Xem rạp chiếu"/>
+        android:text="Xem rạp chiếu"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đăng xuất"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:textColor="@android:color/white"
+        android:visibility="gone"/>
 
 </LinearLayout>

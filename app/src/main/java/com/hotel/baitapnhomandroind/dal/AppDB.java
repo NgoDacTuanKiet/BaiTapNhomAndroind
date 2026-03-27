@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {User.class, Movie.class, Theater.class, Showtime.class, Ticket.class},
-        version = 2, // Tăng version lên 2 để trigger reset database
+        version = 2,
         exportSchema = false
 )
 public abstract class AppDB extends RoomDatabase {
@@ -47,7 +47,8 @@ public abstract class AppDB extends RoomDatabase {
                                     AppDB.class,
                                     "movie_db"
                             )
-                            .fallbackToDestructiveMigration() // Sẽ xóa và tạo lại DB khi tăng version
+                            .fallbackToDestructiveMigration()
+                            .allowMainThreadQueries() // Thêm lại dòng này để tránh crash khi query ở UI thread
                             .addCallback(roomCallback)
                             .build();
                 }
@@ -84,7 +85,7 @@ public abstract class AppDB extends RoomDatabase {
                     database.movieDao().insert(m);
                 }
 
-                // Sample Theaters (8 rạp)
+                // Sample Theaters
                 String[][] theaterData = {
                         {"CGV Vincom Center", "Bà Triệu, Hà Nội"},
                         {"Lotte Cinema Landmark", "Phạm Hùng, Hà Nội"},
