@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 
 @Database(
         entities = {User.class, Movie.class, Theater.class, Showtime.class, Ticket.class},
-        version = 2, // Tăng version lên 2 để trigger reset database
+        version = 4, // Tăng lên 4 để reset DB hoàn toàn
         exportSchema = false
 )
 public abstract class AppDB extends RoomDatabase {
@@ -47,7 +47,7 @@ public abstract class AppDB extends RoomDatabase {
                                     AppDB.class,
                                     "movie_db"
                             )
-                            .fallbackToDestructiveMigration() // Sẽ xóa và tạo lại DB khi tăng version
+                            .fallbackToDestructiveMigration()
                             .addCallback(roomCallback)
                             .build();
                 }
@@ -60,9 +60,23 @@ public abstract class AppDB extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            databaseWriteExecutor.execute(() -> {
-                AppDB database = INSTANCE;
+            seedData();
+        }
 
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            seedData();
+        }
+    };
+
+    private static void seedData() {
+        databaseWriteExecutor.execute(() -> {
+            AppDB database = INSTANCE;
+            if (database == null) return;
+
+            // Sử dụng getAllSync() để kiểm tra đồng bộ trong thread background
+            if (database.movieDao().getAllSync().isEmpty()) {
                 // Sample User
                 User user = new User();
                 user.username = "admin";
@@ -84,16 +98,12 @@ public abstract class AppDB extends RoomDatabase {
                     database.movieDao().insert(m);
                 }
 
-                // Sample Theaters (8 rạp)
+                // Sample Theaters
                 String[][] theaterData = {
                         {"CGV Vincom Center", "Bà Triệu, Hà Nội"},
                         {"Lotte Cinema Landmark", "Phạm Hùng, Hà Nội"},
                         {"BHD Star Discovery", "Cầu Giấy, Hà Nội"},
-                        {"Galaxy Cinema Mipec", "Long Biên, Hà Nội"},
-                        {"Beta Cinemas Mỹ Đình", "Nam Từ Liêm, Hà Nội"},
-                        {"Cinestar Quốc Thanh", "Quận 1, TPHCM"},
-                        {"BHD Star Bitexco", "Quận 1, TPHCM"},
-                        {"Galaxy Nguyễn Du", "Quận 1, TPHCM"}
+                        {"Galaxy Cinema Mipec", "Long Biên, Hà Nội"}
                 };
                 for (String[] data : theaterData) {
                     Theater t = new Theater();
@@ -101,7 +111,7 @@ public abstract class AppDB extends RoomDatabase {
                     t.location = data[1];
                     database.theaterDao().insert(t);
                 }
-            });
-        }
-    };
+            }
+        });
+    }
 }

@@ -1,5 +1,6 @@
 package com.hotel.baitapnhomandroind.dal.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -15,5 +16,8 @@ public interface MovieDao {
     void insert(Movie movie);
 
     @Query("SELECT * FROM movies")
-    List<Movie> getAll();
+    LiveData<List<Movie>> getAll();
+
+    @Query("SELECT * FROM movies")
+    List<Movie> getAllSync(); // Dùng để kiểm tra đồng bộ khi seed data
 }

@@ -7,6 +7,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hotel.baitapnhomandroind.activities.LoginActivity;
+import com.hotel.baitapnhomandroind.activities.MovieListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnViewMovies.setOnClickListener(v -> {
-            // TODO: Implement MovieActivity
+            Intent intent = new Intent(MainActivity.this, MovieListActivity.class);
+            startActivity(intent);
         });
     }
 }

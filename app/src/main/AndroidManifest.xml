@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BaiTapNhomAndroind">
         <activity
+            android:name=".activities.MovieListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
